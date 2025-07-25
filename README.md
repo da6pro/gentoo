@@ -11,6 +11,7 @@ Considerations:
 - working firewalld
 - working network through wifi wlp3s0 interface; dhcp (static ip from router)
 - ccache used as feature to compile the things
+- installed and configured Xorg without selected X Window Manager
 
 # Boot from livecd minimal
 
