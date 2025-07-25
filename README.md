@@ -296,21 +296,19 @@ grub-install --target=x86_64-efi --efi-directory=/boot
 # Rescue
 
 ## Boot Gentoo from livecd source
-## Disable Network Manager
+## Configure network
+
+`wlp3s0` - wifi inet; ip from DHCP
 
 ```
 /etc/init.d/NetworManager stop
-```
-
-Configure WiFi
-
-Check WiFi iterface
-
-```
+wpa_passphrase WIFISSID password >/etc/wpa_supplicant/wpa_supplicant-wlp3s0.conf
+wpa_supplicant -c /etc/wpa_supplicant/wpa_supplicant-wlp3s0.conf -i wlp3s0 -f /var/log/wpa_supplicant.log -B
+dhcpcd wlp3s0
 ip a
 ```
 
-`wlp3s0` - wifi inet
+## Mounts
 
 ```
 cryptsetup luksOpen /dev/nvme0n1p3 lvm
@@ -335,6 +333,5 @@ export PS1="(chroot) $PS1"
 ## recompile kernel
 
 ```
-genkernel --lvm --luks --gpg --busybox all
+genkernel --lvm --luks --gpg --busybox --menuconfig all
 ```
-
