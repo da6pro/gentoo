@@ -5,13 +5,14 @@ Considerations:
 - encrypted root filesystem
 - bassed on LVM (vg0)
 - profile desktop on systemd
-- newest kernel
+- newest kernel with minimal options; tuning for T480
 - working sound
 - working graphics and XOrg
 - working firewalld
 - working network through wifi wlp3s0 interface; dhcp (static ip from router)
 - ccache used as feature to compile the things
 - installed and configured Xorg without selected X Window Manager
+
 
 # Boot from livecd minimal
 
