@@ -286,9 +286,13 @@ GRUB_CMDLINE_LINUX="dolvm crypt_root=/dev/nvme0n1p3 init=/usr/lib/systemd/system
 
 # Configure kernel
 
+- Tuned kernel for Lenovo ThinPad T480: [kernel-config-6.12.31-gentoo-x86_64](kernel-config-6.12.31-gentoo-x86_64)
+- Kernel from Gentoo Live CD: [kernel-gentoo-livecd](kernel-gentoo-livecd)
+
+use one of above kernel config files
+
 ```
-zcat /proc/config.gz >/root/.kernel
-genkernel --luks --lvm  --kernel-config=/root/.kernel all
+genkernel --luks --lvm  --kernel-config=/etc/kernels/kernel-config-6.12.31-gentoo-x86_64
 grub2-mkconfig -o /boot/grub/grub.cfg
 ```
 
@@ -299,6 +303,66 @@ mkdir -p /etc/portage/package.use
 echo "sys-boot/grub device-mapper" > /etc/portage/package.use/grub
 emerge -avq grub:2
 grub-install --target=x86_64-efi --efi-directory=/boot
+```
+
+# `/etc/fstab`
+
+```
+# /etc/fstab: static file system information.
+#
+# See the manpage fstab(5) for more information.
+#
+# NOTE: The root filesystem should have a pass number of either 0 or 1.
+#       All other filesystems should have a pass number of 0 or greater than 1.
+#
+# NOTE: Even though we list ext4 as the type here, it will work with ext2/ext3
+#       filesystems.  This just tells the kernel to use the ext4 driver.
+#
+# NOTE: You can use full paths to devices like /dev/sda3, but it is often
+#       more reliable to use filesystem labels or UUIDs. See your filesystem
+#       documentation for details on setting a label. To obtain the UUID, use
+#       the blkid(8) command.
+
+# <fs>                  <mountpoint>    <type>          <opts>          <dump> <pass>
+/dev/vg0/root           /              ext4      noatime                 0      1
+/dev/vg0/var            /var           ext4      noatime                 0      2
+/dev/vg0/home           /home          ext4      noatime                 0      2
+/dev/vg0/swap           none           swap      sw                      0      0
+proc                    /proc          proc      nosuid,noexec,nodev     0      0
+sysfs                   /sys           sysfs     nosuid,noexec,nodev     0      0
+devpts                  /dev/pts       devpts    gid=5,mode=620          0      0
+tmpfs                   /run           tmpfs     defaults                0      0
+tmpfs                   /dev/shm       tmpfs     defaults                0      0
+/dev/nvme0n1p2          /boot          vfat      noatime                 1      2
+/dev/nvme0n1p1          /boot/efi      vfat      noatime                 1      2
+```
+
+# `root` password
+
+```
+passwd root
+```
+
+# Your user and sudo
+
+```
+useradd -M -s /bin/bash -G wheel,plugdev,audio,video,usb username
+passwd username
+```
+
+be a root
+
+```
+visudo
+```
+
+`/etc/sudoers`
+
+```
+...
+## Same thing without a password
+%wheel ALL=(ALL:ALL) NOPASSWD: ALL
+...
 ```
 
 # Rescue
