@@ -12,7 +12,15 @@ Considerations:
 - working network through wifi wlp3s0 interface; dhcp (static ip from router)
 - ccache used as feature to compile the things
 - installed and configured Xorg without selected X Window Manager
+- fstab layout:
 
+```
+
+```
+- no bullshit
+- usefull links worth to read
+- useful hints
+- look&feel like a celebs
 
 # Boot from livecd minimal
 
@@ -333,5 +341,20 @@ export PS1="(chroot) $PS1"
 ## recompile kernel
 
 ```
-genkernel --lvm --luks --gpg --busybox --menuconfig all
+genkernel --lvm --luks --gpg --busytbdbox --menuconfig all
 ```
+
+# tbd articles
+
+1. Xfce
+2. Gnome
+3. Kde/Plasma
+4. `distcc`
+5. `eix`
+6. quiet boot
+7. no more not needed modules
+8. login managers
+9.
+10.
+
+EOF
