@@ -115,9 +115,6 @@ rm -f *.tar.xz
 emerge -avq ccache
 ```
 
-```
-# make.conf
-
 `/mnt/gentoo/etc/portage/make.conf`
 
 ```
