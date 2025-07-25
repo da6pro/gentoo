@@ -269,6 +269,27 @@ echo "sys-kernel/linux-firmware linux-fw-redistributable" >> /etc/portage/packag
 emerge linux-firmware intel-microcode xf86-video-intel
 ```
 
+# Grub2
+
+```
+mkdir -p /etc/portage/package.use
+echo "sys-boot/grub device-mapper" > /etc/portage/package.use/grub
+emerge -avq grub:2
+grub-install --target=x86_64-efi --efi-directory=/boot
+```
+
+# configure Grub2
+
+`/etc/default/grub`
+
+```
+GRUB_CMDLINE_LINUX="dolvm crypt_root=/dev/nvme0n1p3 init=/usr/lib/systemd/systemd"
+```
+
+# `genkernel`
+
+You can use config from [genkernel.conf](genkernel.conf) - copy it to `/etc/` and review.
+
 # Select kernel
 
 ```
@@ -276,15 +297,7 @@ eselect kernel list
 eselect kernel set 1
 ```
 
-# configure Grub2
-
-[/etc/default/grub]
-
-```
-GRUB_CMDLINE_LINUX="dolvm crypt_root=/dev/nvme0n1p3 init=/usr/lib/systemd/systemd"
-```
-
-# Configure kernel
+# Configure & compile kernel
 
 - Tuned kernel for Lenovo ThinPad T480: [kernel-config-6.12.31-gentoo-x86_64](kernel-config-6.12.31-gentoo-x86_64)
 - Kernel from Gentoo Live CD: [kernel-gentoo-livecd](kernel-gentoo-livecd)
@@ -292,17 +305,9 @@ GRUB_CMDLINE_LINUX="dolvm crypt_root=/dev/nvme0n1p3 init=/usr/lib/systemd/system
 use one of above kernel config files
 
 ```
-genkernel --luks --lvm  --kernel-config=/etc/kernels/kernel-config-6.12.31-gentoo-x86_64
+genkernel --luks --lvm  --menuconfig --kernel-config=/etc/kernels/kernel-config-6.12.31-gentoo-x86_64
 grub2-mkconfig -o /boot/grub/grub.cfg
-```
-
-# Bootloader
-
-```
-mkdir -p /etc/portage/package.use
-echo "sys-boot/grub device-mapper" > /etc/portage/package.use/grub
-emerge -avq grub:2
-grub-install --target=x86_64-efi --efi-directory=/boot
+ls -ltr /boot
 ```
 
 # `/etc/fstab`
@@ -364,6 +369,16 @@ visudo
 %wheel ALL=(ALL:ALL) NOPASSWD: ALL
 ...
 ```
+
+# Final reboot
+
+```
+exit
+shutdown -Fr now
+```
+
+keep calm and fingers crossed
+
 
 # Rescue
 
