@@ -102,19 +102,6 @@ mkdir -p /mnt/gentoo/var
 mount /dev/vg0/var /mnt/gentoo/var
 ```
 
-mount virtual filesystems
-
-```
-mount -t proc /proc /mnt/gentoo/proc
-mount --rbind /sys /mnt/gentoo/sys
-mount --make-rslave /mnt/gentoo/sys
-mount --rbind /dev /mnt/gentoo/dev
-mount --make-rslave /mnt/gentoo/dev
-test -L /dev/shm && rm /dev/shm && mkdir /dev/shm
-mount -t tmpfs -o nosuid,nodev,noexec shm /dev/shm
-chmod 1777 /dev/shm
-```
-
 # Copy resolver
 
 ```
@@ -129,6 +116,32 @@ wget https://bouncer.gentoo.org/fetch/root/all/releases/amd64/autobuilds/2021100
 tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
 rm -f *.tar.xz
 ```
+
+# Mount virtual filesystems
+
+
+```
+mount -t proc /proc /mnt/gentoo/proc
+mount --rbind /sys /mnt/gentoo/sys
+mount --make-rslave /mnt/gentoo/sys
+mount --rbind /dev /mnt/gentoo/dev
+mount --make-rslave /mnt/gentoo/dev
+test -L /dev/shm && rm /dev/shm && mkdir /dev/shm
+mount -t tmpfs -o nosuid,nodev,noexec shm /dev/shm
+chmod 1777 /dev/shm
+```
+
+# Chroot
+
+```
+chroot /mnt/gentoo /bin/bash
+source /etc/profile
+export PS1="(chroot) $PS1"
+```
+
+# Portage sync
+
+emerge --sync
 
 # Install ccache (before make.conf)
 
@@ -186,32 +199,17 @@ LC_MESSAGES=C.utf8
 USE="X gtk gnome systemd -kde pgo sqlite -ipv6 cryptsetup lvm xvfb"
 ```
 
-# Chroot
-
-```
-chroot /mnt/gentoo /bin/bash
-source /etc/profile
-export PS1="(chroot) $PS1"
-```
-
 # mount /boot 
 
 ```
 mount /dev/nvme0n1p2 /boot
 ```
 
-# Sync Portage
-
-```
-emerge --sync
-```
-
-
 # Profile
 
 ```
 eselect profile list
-eselect profile set 4 # -> default/linux/amd64/23.0/desktop/systemd (stable)
+eselect profile set 3 # -> default/linux/amd64/23.0/systemd (stable)
 ```
 
 # Timezone
@@ -250,7 +248,7 @@ env-update && source /etc/profile && export PS1="(chroot) $PS1"
 # minimal software
 
 ```
-emerge gentoolkit sqlite htop eix cryptsetup
+emerge gentoolkit sqlite htop eix cryptsetup dhcpcd wpa_supplicant ufed links git
 ```
 
 # Sync Portage with eix
@@ -277,7 +275,7 @@ emerge sys-kernel/gentoo-sources
 ```
 echo "sys-firmware/intel-microcode intel-ucode" >>/etc/portage/package.license/intel-microcode
 echo "sys-kernel/linux-firmware linux-fw-redistributable" >> /etc/portage/package.license/linux-firmware
-emerge linux-firmware intel-microcode xf86-video-intel
+emerge linux-firmware intel-microcode 
 ```
 
 # Grub2
@@ -285,7 +283,7 @@ emerge linux-firmware intel-microcode xf86-video-intel
 ```
 mkdir -p /etc/portage/package.use
 echo "sys-boot/grub device-mapper" > /etc/portage/package.use/grub
-emerge -avq grub:2
+emerge grub:2
 grub-install --target=x86_64-efi --efi-directory=/boot
 ```
 
@@ -298,6 +296,10 @@ GRUB_CMDLINE_LINUX="dolvm crypt_root=/dev/nvme0n1p3 init=/usr/lib/systemd/system
 ```
 
 # `genkernel`
+
+```
+emerge genkernel
+```
 
 You can use config from [genkernel.conf](genkernel.conf) - copy it to `/etc/` and review.
 
@@ -316,7 +318,14 @@ eselect kernel set 1
 use one of above kernel config files
 
 ```
-genkernel --luks --lvm  --menuconfig --kernel-config=/etc/kernels/kernel-config-6.12.31-gentoo-x86_64
+mkdir /etc/kernels
+cp kernel-config-6.12.31-gentoo-x86_64 /etc/kernels/
+
+```
+compile kernel with `genkernel`. You can select own kernel parts or remove `--menuconfig` and just compile all (krnel & modules).
+
+```
+genkernel --luks --lvm  --menuconfig --kernel-config=/etc/kernels/kernel-config-6.12.31-gentoo-x86_64 all
 grub2-mkconfig -o /boot/grub/grub.cfg
 ls -ltr /boot
 ```
@@ -389,6 +398,32 @@ shutdown -Fr now
 ```
 
 keep calm and fingers crossed
+
+# Customization
+
+## enable gmp server (mouse in text mode)
+
+```
+systemctl enable gpm --now
+```
+
+# X11
+
+`/etc/portage/packages.use/use_flags_packages`
+
+```
+...
+# X11
+
+x11-drivers/xf86-video-intel sna udev -debug dri tools uxa -valgrind xvmc
+x11-base/xorg-drivers  -elographics evdev -joystick synaptics -vmmouse -void -wacom -amdgpu -ast -dummy -fbdev -freedreno -geode -mga -nouveau -nvidia -omap -qxl -r128 -radeon -radeonsi -siliconmotion -tegra -vc4 -vesa -via -virtualbox -vmware
+...
+```
+
+install XOrg server
+```
+emerge -avq x11-base/xorg-server
+```
 
 
 # Rescue
