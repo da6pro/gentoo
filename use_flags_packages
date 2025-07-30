@@ -1,0 +1,47 @@
+net-wireless/wpa_supplicant -test -gui -p2p -smartcard -gui wps wep
+dev-libs/cyrus-sasl kerberos
+net-dns/bind gssapi
+net-nds/openldap experimental sasl
+net-misc/curl adns alt-svc ftp -hsts http2 http3 httpsrr -imap openssl -pop3 psl quic -smtp ssl -tftp websockets -brotli -debug -ech -gnutls -gopher -idn -kerberos -ldap -mbedtls -rtmp -rustls -samba -sasl-scram -ssh -static-libs -telnet -test -verify-sig -zstd
+net-misc/dhcpcd embedded udev -debug -ipv6 -privsep 
+sys-boot/grub device-mapper fonts nls themes doc -efiemu -libzfs -mount -sdl -secureboot -test truetype -verify-sig 
+dev-libs/openssl asm quic -fips -ktls -rfc3779 -sctp -static-libs -test tls-compression -vanilla -verify-sig -weak-ssl-ciphers ABI_X86="(64) -32 (-x32)" CPU_FLAGS_X86="(sse2)"
+sys-devel/gcc cet cxx default-stack-clash-protection default-znow -fortran multilib nls openmp pgo pie sanitize ssp zstd -ada -custom-cflags -d -debug doc -fixed-point -go -graphite -hardened -ieee-long-double -jit -libssp -lto -modula2 -objc -objc-gc -pch -rust systemtap -test -time64 -valgrind -vanilla -vtv
+www-client/links X bzip2 ssl zlib -avif -brotli -fbcon freetype gpm jpeg -libevent -livecd lzip lzma -selinux -suid -svga tiff -webp -zstd
+
+# X11
+
+x11-drivers/xf86-video-intel sna udev -debug dri tools uxa -valgrind xvmc
+x11-base/xorg-drivers  -elographics evdev -joystick synaptics -vmmouse -void -wacom -amdgpu -ast -dummy -fbdev -freedreno -geode -mga -nouveau -nvidia -omap -qxl -r128 -radeon -radeonsi -siliconmotion -tegra -vc4 -vesa -via -virtualbox -vmware
+
+# Git
+
+dev-vcs/git curl gpg -iconv nls pcre -perl safe-directory -webdav -cgi -cvs -doc -highlight keyring -mediawiki -perforce -selinux -subversion -test -tk -xinetd
+
+# LLVM
+
+llvm-core/llvm binutils-plugin libffi zstd -debug -debuginfod -doc -exegesis -libedit -test -verify-sig -xml -z3 ABI_X86="64 -32 -x32" LLVM_TARGETS="AArch64 -AMDGPU -ARM -AVR -BPF -Hexagon -Lanai -LoongArch -MSP430 -Mips -NVPTX -PowerPC -RISCV -SPIRV -Sparc -SystemZ -VE -WebAssembly X86 XCore -ARC -CSKY -DirectX -M68k -Xtensa"
+
+# required by www-client/firefox-128.13.0::gentoo[system-libvpx]
+# required by firefox (argument)
+media-libs/libvpx postproc
+
+# Gnome
+
+gnome-base/nautilus -previewer
+gnome-base/gnome bluetooth classic cups extras -accessibility
+dev-libs/libdbusmenu gtk3
+
+# Budgie
+#  Install everything related to budgie-desktop including budgie-backgrounds, budgie-extras and all the other applets.
+gnome-extra/budgie-meta all-packages
+
+# required by gnome-extra/budgie-extras-1.8.0-r1::SarahMiaOverlay[budgie_extras_applets_all]
+# required by gnome-extra/budgie-meta-10.9.2::SarahMiaOverlay[-minimal]
+# required by gnome-extra/budgie-meta (argument)
+>=dev-libs/appstream-1.0.4-r1 vala
+# required by gnome-extra/budgie-desktop-10.9.2::SarahMiaOverlay
+# required by gnome-extra/budgie-desktop-view-1.3::SarahMiaOverlay
+# required by gnome-extra/budgie-meta-10.9.2::SarahMiaOverlay
+# required by gnome-extra/budgie-meta (argument)
+>=app-i18n/ibus-1.5.31-r1 vala

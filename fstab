@@ -13,15 +13,15 @@
 #       documentation for details on setting a label. To obtain the UUID, use
 #       the blkid(8) command.
 
-# <fs>			<mountpoint>	<type>		<opts>		<dump> <pass>
-/dev/vg0/root		/              ext4      noatime                 0      1
-/dev/vg0/var		/var           ext4      noatime                 0      2
-/dev/vg0/home		/home          ext4      noatime                 0      2
-/dev/vg0/swap		none           swap      sw                      0      0
-proc                /proc          proc      nosuid,noexec,nodev     0      0
-sysfs               /sys           sysfs     nosuid,noexec,nodev     0      0
-devpts              /dev/pts       devpts    gid=5,mode=620          0      0
-tmpfs               /run           tmpfs     defaults                0      0
-tmpfs               /dev/shm       tmpfs     defaults                0      0
-/dev/nvme0n1p2		/boot          vfat      noatime                 1      2
-/dev/nvme0n1p1		/boot/efi      vfat      noatime                 1      2
+# <fs>                  <mountpoint>    <type>          <opts>          <dump> <pass>
+/dev/vg0/root           /              ext4      noatime                 0      1
+/dev/vg0/var            /var           ext4      noatime                 0      2
+/dev/vg0/home           /home          ext4      noatime                 0      2
+/dev/vg0/swap           none           swap      sw                      0      0
+proc                    /proc          proc      nosuid,noexec,nodev     0      0
+sysfs                   /sys           sysfs     nosuid,noexec,nodev     0      0
+devpts                  /dev/pts       devpts    gid=5,mode=620          0      0
+tmpfs                   /run           tmpfs     defaults                0      0
+tmpfs                   /dev/shm       tmpfs     defaults                0      0
+/dev/nvme0n1p2          /boot          vfat      noatime                 1      2
+/dev/nvme0n1p1          /boot/efi      vfat      noatime                 1      2
