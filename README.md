@@ -28,10 +28,6 @@ tmpfs               /dev/shm       tmpfs     defaults                0      0
 /dev/nvme0n1p2		/boot          vfat      noatime                 1      2
 /dev/nvme0n1p1		/boot/efi      vfat      noatime                 1      2
 ```
-- no bullshit
-- usefull links worth to read
-- useful hints
-- look&feel like a celebs
 
 # Boot from livecd minimal
 
@@ -112,7 +108,7 @@ cp -f /etc/resolv.conf /mnt/gentoo/etc/
 
 ```
 cd /mnt/gentoo
-wget https://bouncer.gentoo.org/fetch/root/all/releases/amd64/autobuilds/20211003T170529Z/stage3-amd64-systemd-20211003T170529Z.tar.xz
+links https://distfiles.gentoo.org/releases/amd64/autobuilds/current-stage3-amd64-desktop-systemd/
 tar xpvf stage3-*.tar.xz --xattrs-include='*.*' --numeric-owner
 rm -f *.tar.xz
 ```
@@ -186,7 +182,7 @@ L10N="en en-US"
 VIDEO_CARDS="intel i915"
 
 # Input devices
-INPUT_DEVICES="libinput"
+INPUT_DEVICES="libinput synaptics"
 
 # Filter LLVM's targets to x86 only
 LLVM_TARGETS="X86"
@@ -411,14 +407,12 @@ systemctl enable gpm --now
 
 # X11
 
-`/etc/portage/packages.use/use_flags_packages`
+`/etc/portage/packages.use/use_flags`
 
 ```
-...
-# X11
 
-x11-drivers/xf86-video-intel sna udev -debug dri tools uxa -valgrind xvmc
-x11-base/xorg-drivers  -elographics evdev -joystick synaptics -vmmouse -void -wacom -amdgpu -ast -dummy -fbdev -freedreno -geode -mga -nouveau -nvidia -omap -qxl -r128 -radeon -radeonsi -siliconmotion -tegra -vc4 -vesa -via -virtualbox -vmware
+echo "x11-drivers/xf86-video-intel sna udev -debug dri tools uxa -valgrind xvmc" >>/etc/portage/packages.use/use_flags
+echo "x11-base/xorg-drivers evdev synaptics" >>/etc/portage/packages.use/use_falgs
 ...
 ```
 
