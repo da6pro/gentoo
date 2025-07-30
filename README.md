@@ -223,6 +223,8 @@ emerge --config sys-libs/timezone-data
 
 ```
 emerge vim
+eselect editor list
+eselect editor set 3 <vim>
 ```
 
 # Locale
@@ -248,7 +250,7 @@ env-update && source /etc/profile && export PS1="(chroot) $PS1"
 # minimal software
 
 ```
-emerge gentoolkit sqlite htop eix cryptsetup dhcpcd wpa_supplicant ufed links git
+emerge gentoolkit sqlite htop eix cryptsetup dhcpcd wpa_supplicant ufed links git sudo
 ```
 
 # Sync Portage with eix
